@@ -1,0 +1,81 @@
+swagger: "2.0"
+info:
+  description: "This is the synchronous HTTP api exposed by the Facade Service."
+  version: "1.0.0"
+  title: "HTTP API Facade Service"
+tags:
+- name: "validation"
+  description: "Endpoints of the validation api"
+- name: "health"
+  description: "Endpoints of the health api"
+- name: "tasks"
+  description: "Endpoints of the task api"
+schemes:
+#- "https"
+- "http"
+paths:
+  /sagas/all:
+    get:
+      tags:
+      - "tasks"
+      summary: "Get all Saga transactions"
+      description: "Returns a list with a description of every Saga."
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Response body contains list of current Saga transactions."
+  /sagas/info:
+    get:
+      tags:
+      - "tasks"
+      summary: "Get Saga info"
+      description: "Return detailed information about Saga transaction."
+      produces:
+      - "application/json"
+      parameters:
+        - in: query
+          name: traceId
+          required: true 
+          schema:
+            type: string
+          description: Identifier of the Saga
+      responses:
+        "200":
+          description: "Response body contains information about current Saga transaction."
+  /sagas/stop:
+    get:
+      tags:
+      - "tasks"
+      summary: "Stop Saga"
+      description: "Stops the current Saga."
+      produces:
+      - "application/json"
+      parameters:
+        - in: query
+          name: traceId
+          required: true
+          #schema:
+          #  type: string
+          description: Identifier of the Saga
+      responses:
+        "200":
+          description: "Response body contains confirmation that the Saga transaction was stopped."
+    /sagas/allStopped:
+      get:
+        tags:
+        - "tasks"
+        summary: "Get all stopped Saga transactions"
+        description: "Returns a list of all stopped Saga transactions."
+        produces:
+        - "application/json"
+        parameters:
+          - in: query
+            name: traceId
+            schema:
+              type: string
+            description: Identifier of the Saga
+      responses:
+        "200":
+          description: "Response body contains the list of all stopped Saga transactions."
+          
