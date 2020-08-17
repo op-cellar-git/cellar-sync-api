@@ -28,7 +28,16 @@ paths:
               schema: 
                 type: array
                 items: 
-                  type: string
+                  type: object
+                  properties:
+                    traceId:
+                      type: string
+                    ts-saga:
+                       type: string
+                    package-name:
+                      type: string
+                    status:
+                      type: string
             
   /sagas/info:
     get:
@@ -85,25 +94,26 @@ paths:
     get:
       tags:
       - "tasks"
-      summary: "Stop Saga"
+      summary: "Resume Saga"
       description: "Resumes the current Saga."
       parameters:
         - $ref: '#/components/parameters/traceId'
       responses:
         "200":
-          description: "Response body contains confirmation that the Saga transaction was stopped."
-          content: 
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: string
+          $ref: '#/components/responses/genericResponse'
 components:
-    #schemas:
-    #  traceId:
-    #    type: string
-    #    required: true
-    #    description: Identifier of the Saga
+  responses:
+    genericResponse:
+      description: Generic response
+      content:
+        application/json:
+          schema: 
+            type: object
+            properties:
+              result:
+                type: string
+            required:
+              - result
   parameters:
     traceId:
       in: query
