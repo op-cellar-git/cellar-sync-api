@@ -1,4 +1,4 @@
-swagger: "2.0"
+openapi: "3.0.0"
 info:
   description: "This is the synchronous HTTP api exposed by the Facade Service."
   version: "1.0.0"
@@ -10,9 +10,9 @@ tags:
   description: "Endpoints of the health api"
 - name: "tasks"
   description: "Endpoints of the task api"
-schemes:
+#schemes:
 #- "https"
-- "http"
+#- "http"
 paths:
   /sagas/all:
     get:
@@ -20,62 +20,95 @@ paths:
       - "tasks"
       summary: "Get all Saga transactions"
       description: "Returns a list with a description of every Saga."
-      produces:
-      - "application/json"
       responses:
         "200":
           description: "Response body contains list of current Saga transactions."
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+            
   /sagas/info:
     get:
       tags:
       - "tasks"
       summary: "Get Saga info"
       description: "Return detailed information about Saga transaction."
-      produces:
-      - "application/json"
       parameters:
-        - in: query
-          name: traceId
-          required: true 
-          schema:
-            type: string
-          description: Identifier of the Saga
+        - $ref: '#/components/parameters/traceId'
       responses:
         "200":
           description: "Response body contains information about current Saga transaction."
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
   /sagas/stop:
     get:
       tags:
       - "tasks"
       summary: "Stop Saga"
       description: "Stops the current Saga."
-      produces:
-      - "application/json"
       parameters:
-        - in: query
-          name: traceId
-          required: true
-          #schema:
-          #  type: string
-          description: Identifier of the Saga
+        - $ref: '#/components/parameters/traceId'
       responses:
         "200":
           description: "Response body contains confirmation that the Saga transaction was stopped."
-    /sagas/allStopped:
-      get:
-        tags:
-        - "tasks"
-        summary: "Get all stopped Saga transactions"
-        description: "Returns a list of all stopped Saga transactions."
-        produces:
-        - "application/json"
-        parameters:
-          - in: query
-            name: traceId
-            schema:
-              type: string
-            description: Identifier of the Saga
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /sagas/allStopped:
+    get:
+      tags:
+      - "tasks"
+      summary: "Get all stopped Saga transactions"
+      description: "Returns a list of all stopped Saga transactions."
+      parameters:
+        - $ref: '#/components/parameters/traceId'
       responses:
         "200":
           description: "Response body contains the list of all stopped Saga transactions."
-          
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /sagas/resume:
+    get:
+      tags:
+      - "tasks"
+      summary: "Stop Saga"
+      description: "Resumes the current Saga."
+      parameters:
+        - $ref: '#/components/parameters/traceId'
+      responses:
+        "200":
+          description: "Response body contains confirmation that the Saga transaction was stopped."
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+components:
+    #schemas:
+    #  traceId:
+    #    type: string
+    #    required: true
+    #    description: Identifier of the Saga
+  parameters:
+    traceId:
+      in: query
+      name: traceId
+      required: true
+      schema:
+        type: string
+      description: Identifier of the Saga
