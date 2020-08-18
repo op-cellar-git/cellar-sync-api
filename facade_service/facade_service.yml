@@ -1,180 +1,345 @@
-openapi: "3.0.0"
-info:
-  description: "This is the synchronous HTTP api exposed by the Facade Service."
-  version: "1.0.0"
-  title: "HTTP API Facade Service"
-tags:
-- name: "validation"
-  description: "Endpoints of the validation api"
-- name: "health"
-  description: "Endpoints of the health api"
-- name: "tasks"
-  description: "Endpoints of the task api"
-#schemes:
-#- "https"
-#- "http"
-paths:
-  /sagas/all:
-    get:
-      tags:
-      - "tasks"
-      summary: "Get all Saga transactions"
-      description: "Returns a list with a description of every Saga."
-      responses:
-        "200":
-          description: "Response body contains list of current Saga transactions."
-          content: 
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: object
-                  properties:
-                    traceId:
-                      type: string
-                    ts-saga:
-                       type: string
-                    package-name:
-                      type: string
-                    status:
-                      type: string
-                  required: 
-                  - traceId
-                  - ts-saga
-                  - package-name
-                  - status
-            
-  /sagas/info:
-    get:
-      tags:
-      - "tasks"
-      summary: "Get Saga info"
-      description: "Return detailed information about Saga transaction."
-      parameters:
-        - $ref: '#/components/parameters/traceId'
-      responses:
-        "200":
-          description: "Response body contains information about current Saga transaction."
-          content: 
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: object
-                  properties:
-                    traceId:
-                      type: string
-                    ts-saga:
-                       type: string
-                       format: date-time
-                    package-name:
-                      type: string
-                    resource-ids:
-                      type:  array
-                      items:
+  openapi: "3.0.0"
+  info:
+    description: "This is the synchronous HTTP api exposed by the Facade Service."
+    version: "1.0.0"
+    title: "HTTP API Facade Service"
+  tags:
+  - name: "validation"
+    description: "Endpoints of the validation api"
+  - name: "health"
+    description: "Endpoints of the health api"
+  - name: "tasks"
+    description: "Endpoints of the task api"
+  - name: "configuration"
+    description: "Endpoints of the configuration api"
+  #schemes:
+  #- "https"
+  #- "http"
+  paths:
+    /sagas/all:
+      get:
+        tags:
+        - "tasks"
+        summary: "Get all Saga transactions"
+        description: "Returns a list with a description of every Saga."
+        responses:
+          "200":
+            description: "Response body contains list of current Saga transactions."
+            content: 
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: object
+                    properties:
+                      traceId:
                         type: string
-                    status:
-                      type: object
-                    ts-status:
-                      type: string
-                      format: date-time
-                  required: 
-                  - traceId
-                  - ts-saga
-                  - package-name
-                  - resource-ids
-                  - status
-                  - ts-status
-  /sagas/stop:
-    get:
-      tags:
-      - "tasks"
-      summary: "Stop Saga"
-      description: "Stops the current Saga."
-      parameters:
-        - $ref: '#/components/parameters/traceId'
-      responses:
-        "200":
-          $ref: '#/components/responses/genericResponse'
-  /sagas/allStopped:
-    get:
-      tags:
-      - "tasks"
-      summary: "Get all stopped Saga transactions"
-      description: "Returns a list of all stopped Saga transactions."
-      parameters:
-        - $ref: '#/components/parameters/traceId'
-      responses:
-        "200":
-          description: "Response body contains the list of all stopped Saga transactions."
-          content: 
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: object
-                  properties:
-                    traceId:
-                      type: string
-                    ts-saga:
-                       type: string
-                       format: date-time
-                    ts-stop:
-                      type: string
-                      format: date-time
-                    package-name:
-                      type: string
-                    next-op:
-                      type: string
-                  required: 
-                  - traceId
-                  - ts-saga
-                  - ts-stop
-                  - package-name
-                  - next-op
-  /sagas/resume:
-    get:
-      tags:
-      - "tasks"
-      summary: "Resume Saga"
-      description: "Resumes the current Saga."
-      parameters:
-        - $ref: '#/components/parameters/traceId'
-      responses:
-        "200":
-          $ref: '#/components/responses/genericResponse'
-  /sagas/abort:
-    get:
-      tags:
-      - "tasks"
-      summary: "Abort Saga"
-      description: "Aborts the current Saga."
-      parameters:
-        - $ref: '#/components/parameters/traceId'
-      responses:
-        "200":
-          $ref: '#/components/responses/genericResponse'
-components:
-  responses:
-    genericResponse:
-      description: Operation acknowledgement
-      content:
-        application/json:
-          schema: 
-            type: object
-            properties:
-              result:
-                type: string
-            required:
-              - result
-  parameters:
-    traceId:
-      in: query
-      name: traceId
-      required: true
-      schema:
-        type: string
-      description: Identifier of the Saga
- 
-    
+                      ts-saga:
+                         type: string
+                      package-name:
+                        type: string
+                      status:
+                        type: string
+                    required: 
+                    - traceId
+                    - ts-saga
+                    - package-name
+                    - status
+              
+    /sagas/info:
+      get:
+        tags:
+        - "tasks"
+        summary: "Get Saga info"
+        description: "Return detailed information about Saga transaction."
+        parameters:
+          - $ref: '#/components/parameters/traceId'
+        responses:
+          "200":
+            description: "Response body contains information about current Saga transaction."
+            content: 
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: object
+                    properties:
+                      traceId:
+                        type: string
+                      ts-saga:
+                         type: string
+                         format: date-time
+                      package-name:
+                        type: string
+                      resource-ids:
+                        type:  array
+                        items:
+                          type: string
+                      status:
+                        type: object
+                      ts-status:
+                        type: string
+                        format: date-time
+                    required: 
+                    - traceId
+                    - ts-saga
+                    - package-name
+                    - resource-ids
+                    - status
+                    - ts-status
+    /sagas/stop:
+      get:
+        tags:
+        - "tasks"
+        summary: "Stop Saga"
+        description: "Stops the current Saga."
+        parameters:
+          - $ref: '#/components/parameters/traceId'
+        responses:
+          "200":
+            $ref: '#/components/responses/genericResponse'
+    /sagas/allStopped:
+      get:
+        tags:
+        - "tasks"
+        summary: "Get all stopped Saga transactions"
+        description: "Returns a list of all stopped Saga transactions."
+        parameters:
+          - $ref: '#/components/parameters/traceId'
+        responses:
+          "200":
+            description: "Response body contains the list of all stopped Saga transactions."
+            content: 
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: object
+                    properties:
+                      traceId:
+                        type: string
+                      ts-saga:
+                         type: string
+                         format: date-time
+                      ts-stop:
+                        type: string
+                        format: date-time
+                      package-name:
+                        type: string
+                      next-op:
+                        type: string
+                    required: 
+                    - traceId
+                    - ts-saga
+                    - ts-stop
+                    - package-name
+                    - next-op
+    /sagas/resume:
+      get:
+        tags:
+        - "tasks"
+        summary: "Resume Saga"
+        description: "Resumes the current Saga."
+        parameters:
+          - $ref: '#/components/parameters/traceId'
+        responses:
+          "200":
+            $ref: '#/components/responses/genericResponse'
+    /sagas/abort:
+      get:
+        tags:
+        - "tasks"
+        summary: "Abort Saga"
+        description: "Aborts the current Saga."
+        parameters:
+          - $ref: '#/components/parameters/traceId'
+        responses:
+          "200":
+            $ref: '#/components/responses/genericResponse'
   
+    /configuration/info:
+      get:
+        tags:
+        - "configuration"
+        summary: "Get information anout current configuration"
+        description: "Returns configuration details."
+        responses:
+          "200":
+              description: "Response body contains detailed information about the configuration resources of Cellar."
+              content: 
+                application/json:
+                  schema: 
+                    type: object
+                    properties:
+                      psi:
+                         $ref: '#/components/schemas/configurationItem'
+                      mets:
+                         $ref: '#/components/schemas/configurationItem'
+                      shacl:
+                         $ref: '#/components/schemas/configurationItem'
+                    required: 
+                    - psi
+                    - mets
+                    - shacl
+                    
+    /health:
+      get:
+        tags:
+        - "health"
+        summary: "Get global health report"
+        description: "Returns a report containing the health status of every ingestion service."
+        responses:
+          "200":
+            description: "Response body contains the health status of every ingestion service."
+            content: 
+                application/json:
+                  schema: 
+                    type: object
+                    properties:
+                      health:
+                        type: string
+                      services:
+                        type: array
+                        items:
+                          allOf:
+                            - type: object
+                              properties:
+                                sec:
+                                  type: string
+                            - type: object
+                              properties:
+                                validation:
+                                  type: string
+                            - type: object
+                              properties:
+                                locking:
+                                  type: string
+                            - type: object
+                              properties:
+                                configuration:
+                                  type: string
+                            - type: object
+                              properties:
+                                database:
+                                  type: string
+                            - type: object
+                              properties:
+                                indexation:
+                                  type: string
+                    required: 
+                    - health
+                    - services
+    /sec/health:
+      get:
+          tags:
+          - "health"
+          summary: "Get detailed health report"
+          description: "Returns a detailed health report of the service and all its instances."
+          responses:
+            "200":
+               $ref: '#/components/responses/healthResponse'
+    /validation/health:
+      get:
+          tags:
+          - "health"
+          summary: "Get detailed health report"
+          description: "Returns a detailed health report of the service and all its instances."
+          responses:
+            "200":
+               $ref: '#/components/responses/healthResponse'
+    /locking/health:
+      get:
+          tags:
+          - "health"
+          summary: "Get detailed health report"
+          description: "Returns a detailed health report of the service and all its instances."
+          responses:
+            "200":
+               $ref: '#/components/responses/healthResponse'
+    /configuration/health:
+      get:
+          tags:
+          - "health"
+          summary: "Get detailed health report"
+          description: "Returns a detailed health report of the service and all its instances."
+          responses:
+            "200":
+               $ref: '#/components/responses/healthResponse'
+    /database/health:
+      get:
+          tags:
+          - "health"
+          summary: "Get detailed health report"
+          description: "Returns a detailed health report of the service and all its instances."
+          responses:
+            "200":
+               $ref: '#/components/responses/healthResponse'
+    /indexation/health:
+      get:
+          tags:
+          - "health"
+          summary: "Get detailed health report"
+          description: "Returns a detailed health report of the service and all its instances."
+          responses:
+            "200":
+               $ref: '#/components/responses/healthResponse'
+  components:
+    schemas:
+      configurationItem:
+        type: object
+        properties:
+          commit:
+            type: string
+          date:
+            type: string
+            format: date-time
+    responses:
+      genericResponse:
+        description: Operation acknowledgement
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                result:
+                  type: string
+              required:
+                - result
+      healthResponse:
+         description: Detailed health report from every service instance.
+         content:
+          application/json:
+            schema: 
+              type: array
+              items:
+                allOf:
+                - type: object
+                  properties:
+                    machine:
+                      type: string
+                    connections:
+                      type: object
+                      properties:
+                        message-broker:
+                          type: string
+                        common-area:
+                          type: string
+                    modules:
+                      type: object
+                      properties:
+                        psi-validation-last-elapsed:
+                          type: string
+                    main-memory-usage:
+                      type: string
+                    second-memory-usage:
+                      type: string
+                    health:
+                      type: string
+    parameters:
+      traceId:
+        in: query
+        name: traceId
+        required: true
+        schema:
+          type: string
+        description: Identifier of the Saga
